@@ -11,12 +11,14 @@ import javax.swing.JPanel;
 public class Game extends JPanel implements KeyListener, Runnable {
 
     private static final long serialVersionUID = 1L;
-    private static final int HEIGHT = 630;
-    private static final int WIDTH = 400;
-    private static final Font main = new Font("fsdf", Font.PLAIN, 28);
+    public static final int HEIGHT = 630;
+    public static final int WIDTH = 400;
+    public static final Font main = new Font("fsdf", Font.PLAIN, 28);
     private Thread game;
     private boolean running;
     private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+    private GameBoard board;
+
 
     private long startTime;
     private long elapsed;
@@ -26,9 +28,13 @@ public class Game extends JPanel implements KeyListener, Runnable {
        setFocusable(true);
        setPreferredSize(new Dimension(WIDTH, HEIGHT));
        addKeyListener(this);
+
+       board = new GameBoard(WIDTH/2 - GameBoard.BOARD_WIDTH/2,HEIGHT - GameBoard.BOARD_HEIGHT - 10);
     }
 
     private void update(){
+        board.update();
+        Keyboard.update();
 
     }
 
@@ -36,6 +42,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
         Graphics2D g = (Graphics2D) image.getGraphics();
         g.setColor(Color.WHITE);
         g.fillRect(0,0,WIDTH,HEIGHT);
+        board.render(g);
         g.dispose();
 
         Graphics2D g2d = (Graphics2D) getGraphics();
@@ -110,12 +117,14 @@ public class Game extends JPanel implements KeyListener, Runnable {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        Keyboard.keyPressed(e);
 
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        Keyboard.keyReleased(e);
 
     }
-    
+
 }
