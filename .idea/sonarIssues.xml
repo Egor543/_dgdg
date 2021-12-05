@@ -8,12 +8,37 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/com/fatacubez/game/Direction.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/com/fatacubez/game/DrawUtils.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/com/fatacubez/game/Game.java">
           <value>
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/com/fatacubez/game/GameBoard.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/com/fatacubez/game/Keyboard.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/com/fatacubez/game/Main.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/com/fatacubez/game/Tile.java">
           <value>
             <set />
           </value>
