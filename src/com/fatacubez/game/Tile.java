@@ -23,7 +23,7 @@ public class Tile {
        this.value = value;
        this.x=x;
        this.y=y;
-       tileImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
+       tileImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
        drawImage();
    }
 
@@ -98,5 +98,17 @@ public class Tile {
        int drawY = WIDTH / 2 - DrawUtils.getMessageHeight("" + value, font, g)/2;
        g.drawString("" + value, drawX, drawY);
        g.dispose();
+   }
+
+   public void update(){
+
+   }
+
+   public void render(Graphics2D g){
+       g.drawImage(tileImage,x,y,null);
+   }
+
+   public int getValue(){
+       return value;
    }
 }
