@@ -1,11 +1,9 @@
 package com.fatacubez.game;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.sql.SQLOutput;
 import javax.swing.JPanel;
 
 public class Game extends JPanel implements KeyListener, Runnable {
@@ -13,16 +11,18 @@ public class Game extends JPanel implements KeyListener, Runnable {
     private static final long serialVersionUID = 1L;
     public static final int HEIGHT = 630;
     public static final int WIDTH = 400;
-    public static final Font main = new Font("fsdf", Font.PLAIN, 28);
+    public static final Font main = new Font("", Font.PLAIN, 28);
     private Thread game;
     private boolean running;
-    private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+    private final BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     private GameBoard board;
 
 
     private long startTime;
     private long elapsed;
     private boolean set;
+
+
 
     public Game(){
        setFocusable(true);
@@ -33,8 +33,21 @@ public class Game extends JPanel implements KeyListener, Runnable {
     }
 
     private void update(){
+        if(Keys.pressed[KeyEvent.VK_DOWN]){
+            System.out.println("downnn");
+
+        }
+        if(Keys.pressed[KeyEvent.VK_LEFT]){
+            System.out.println("lefffft");
+        }
+        if(Keys.pressed[KeyEvent.VK_RIGHT]){
+            System.out.println("riiiiiiight");
+        }
+        if(Keys.pressed[KeyEvent.VK_UP]){
+            System.out.println("uuuuuuuup");
+        }
         board.update();
-        Keyboard.update();
+        Keys.update();
 
     }
 
@@ -54,9 +67,9 @@ public class Game extends JPanel implements KeyListener, Runnable {
     @Override
     public void run() {
 
-        int fps = 0, update = 0;
+        int fps = 0, updates = 0;
         long fpsTimer = System.currentTimeMillis();
-        double nsPerUpdate = 100000000.0/60;
+        double nsPerUpdate = 60.0/1;
 
         double then = System.nanoTime();
         double unprocessed = 0;
@@ -68,7 +81,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
            then = now;
 
         while(unprocessed >= 1){
-            update++;
+            updates++;
             update();
             unprocessed--;
             shouldRender = true;
@@ -89,10 +102,10 @@ public class Game extends JPanel implements KeyListener, Runnable {
         }
 
         if(System.currentTimeMillis() - fpsTimer > 1000){
-            System.out.printf("%d fps %d updates", fps,update);
+            System.out.printf("%d fps %d updates", fps,updates);
             System.out.println();
             fps = 0;
-            update = 0;
+            updates = 0;
             fpsTimer += 1000;
         }
     }
@@ -104,7 +117,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
         game.start();
     }
 
-    public synchronized  void stop(){
+    private synchronized  void stop(){
         if(!running) return;
         running = false;
         System.exit(0);
@@ -117,14 +130,13 @@ public class Game extends JPanel implements KeyListener, Runnable {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        Keyboard.keyPressed(e);
+        Keys.keyPressed(e);
 
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        Keyboard.keyReleased(e);
-
+        Keys.keyReleased(e);
     }
 
 }

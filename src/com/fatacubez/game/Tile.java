@@ -12,18 +12,41 @@ public class Tile {
     public static final int ARC_HEIGHT = 15;
 
     private int value;
-    private BufferedImage tileImage;
+    private final BufferedImage tileImage;
     private Color background;
     private Color text;
     private Font font;
+
+    public Point getSlideTo() {
+        return slideTo;
+    }
+
+    public void setSlideTo(Point slideTo) {
+        this.slideTo = slideTo;
+    }
+
+    private Point slideTo;
     private int x;
     private int y;
 
-   public Tile(int value, int x, int y){
+    private boolean canCombine = true;
+
+    public boolean canCombine() {
+        return canCombine;
+    }
+
+    public void setCanCombine(boolean canCombine) {
+        this.canCombine = canCombine;
+    }
+
+
+
+    public Tile(int value, int x, int y){
        this.value = value;
        this.x=x;
        this.y=y;
-       tileImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+       slideTo = new Point(x,y);
+       tileImage = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
        drawImage();
    }
 
@@ -75,7 +98,7 @@ public class Tile {
        }
        else{
            background = Color.black;
-           text = Color.WHITE;
+           text = Color.white;
        }
 
        g.setColor(new Color(0,0,0,0));
@@ -95,13 +118,13 @@ public class Tile {
        g.setFont(font);
 
        int drawX = WIDTH / 2 - DrawUtils.getMessageWidth("" + value, font, g)/2;
-       int drawY = WIDTH / 2 - DrawUtils.getMessageHeight("" + value, font, g)/2;
+       int drawY = HEIGHT / 2 + DrawUtils.getMessageHeight("" + value, font, g)/2;
        g.drawString("" + value, drawX, drawY);
        g.dispose();
    }
 
    public void update(){
-
+        //do nothing
    }
 
    public void render(Graphics2D g){
@@ -111,4 +134,25 @@ public class Tile {
    public int getValue(){
        return value;
    }
+
+   public void setValue(int value){
+        this.value = value;
+        drawImage();
+   }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
 }
