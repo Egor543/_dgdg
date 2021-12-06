@@ -73,11 +73,11 @@ public class Tile {
            text = new Color(0xfffff);
        }
        else if (value == 64){
-           background = new Color(0xff000);
-           text = new Color(0xfffff);
+           background = new Color(0xff0);
+           text = new Color(0xff0000);
        }
        else if (value == 128){
-           background = new Color(0xe9de84);
+           background = new Color(0xe9e864);
            text = new Color(0xfffff);
        }
        else if (value == 256){

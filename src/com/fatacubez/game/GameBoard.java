@@ -3,6 +3,7 @@ package com.fatacubez.game;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.Random;
 
 public class GameBoard implements GameBoard_move {
@@ -18,6 +19,9 @@ public class GameBoard implements GameBoard_move {
     private BufferedImage finalBoard;
     private int x;
     private int y;
+    private int score = 0;
+    private int highscore = 0;
+    private Font scoreFont;
 
     private static int SPACING = 10;
     public static int BOARD_WIDTH = (COLS + 1) * SPACING + COLS * Tile.WIDTH;
@@ -25,15 +29,73 @@ public class GameBoard implements GameBoard_move {
 
     private boolean hasStarted;
 
+    private String saveDataPath;
+    private String fileName = "SaveData";
     public GameBoard(int x, int y) {
+        try{
+            saveDataPath = GameBoard.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+        scoreFont = Game.main.deriveFont(24f);
         this.x = x;
         this.y = y;
         board = new Tile[ROWS][COLS];
         gameBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
         finalBoard = new BufferedImage(BOARD_WIDTH, BOARD_HEIGHT, BufferedImage.TYPE_INT_RGB);
 
+        loadHighScore();
         createBoardImage();
         start();
+    }
+
+    private void createSaveData(){
+        try{
+            File file = new File(saveDataPath,fileName);
+
+            FileWriter output  = new FileWriter(file);
+            BufferedWriter writer = new BufferedWriter(output);
+            writer.write("" + 0);
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private void loadHighScore(){
+
+        try {
+            File f = new File(saveDataPath, fileName);
+            if (!f.isFile()){
+                createSaveData();
+            }
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
+            highscore = Integer.parseInt(reader.readLine());
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void setHighscore(){
+        FileWriter output = null;
+
+        try{
+          File f = new File(saveDataPath, fileName);
+          output = new FileWriter(f);
+          BufferedWriter writer = new BufferedWriter(output);
+          writer.write(""+highscore);
+          writer.close();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     private void createBoardImage() {
@@ -55,10 +117,6 @@ public class GameBoard implements GameBoard_move {
         for(int i= 0; i < startingTiles; i++){
             spawnRandom();
         }
-//        spawn(0,0,2);
-//        spawn(0,1,2);
-//        spawn(0,2,2);
-//        spawn(0,3,2);
     }
 
     private void spawn(int row, int col, int value) {
@@ -108,11 +166,21 @@ public class GameBoard implements GameBoard_move {
 
         g.drawImage(finalBoard, x, y,null);
         g2d.dispose();
+
+        g.setColor(Color.lightGray);
+        g.setFont(scoreFont);
+        g.drawString("" + score,30,40);
+        g.setColor(Color.red);
+        g.drawString("Best: " + highscore, Game.WIDTH - DrawUtils.getMessageWidth("Best: " + highscore,scoreFont,g) - 20,40);
     }
 
     @Override
     public  void  update(){
         checkKeys();
+
+        if(score>highscore){
+            highscore = score;
+        }
 
         for (int row = 0; row < ROWS; row++) {
             for (int col = 0; col < COLS; col++) {
@@ -121,7 +189,6 @@ public class GameBoard implements GameBoard_move {
                 current.update();
                 resetPosition(current, row, col);
                 if (current.getValue() == 2048) {
-//                    Won(true);
                 }
             }
         }
@@ -181,8 +248,7 @@ public class GameBoard implements GameBoard_move {
                 canMove = true;
                 board[newRow - verticalDirection][newCol - horizontalDirection] = null;
                 board[newRow][newCol].setSlideTo(new Point(newRow, newCol));
-//                board[newRow][newCol].setCombineAnimation(true);
-//                scores.setCurrentScore(scores.getCurrentScore() + board[newRow][newCol].getValue());
+                score += board[newRow][newCol].getValue();
             }
             else {
                 move = false;
@@ -274,17 +340,20 @@ public class GameBoard implements GameBoard_move {
        }
    }
 
-   private boolean checkDead(){
+   private void checkDead(){
         for (int row =0; row <ROWS;row++){
             for (int col = 0; col <COLS;col++){
-                if (board[row][col] == null) return false;
+                if (board[row][col] == null) return;
                 boolean canCombine = CST(row, col, board[row][col]);
                 if (canCombine){
-                    return false;
+                    return;
                 }
             }
         }
-        return true;
+
+        dead = true;
+        setHighscore();
+
    }
 
     private boolean CST(int row, int col, Tile current) {

@@ -33,19 +33,6 @@ public class Game extends JPanel implements KeyListener, Runnable {
     }
 
     private void update(){
-        if(Keys.pressed[KeyEvent.VK_DOWN]){
-            System.out.println("downnn");
-
-        }
-        if(Keys.pressed[KeyEvent.VK_LEFT]){
-            System.out.println("lefffft");
-        }
-        if(Keys.pressed[KeyEvent.VK_RIGHT]){
-            System.out.println("riiiiiiight");
-        }
-        if(Keys.pressed[KeyEvent.VK_UP]){
-            System.out.println("uuuuuuuup");
-        }
         board.update();
         Keys.update();
 
@@ -69,7 +56,7 @@ public class Game extends JPanel implements KeyListener, Runnable {
 
         int fps = 0, updates = 0;
         long fpsTimer = System.currentTimeMillis();
-        double nsPerUpdate = 60.0/1;
+        double nsPerUpdate = 1000000000.0/60;
 
         double then = System.nanoTime();
         double unprocessed = 0;
