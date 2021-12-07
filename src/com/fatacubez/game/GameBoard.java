@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Random;
 
-public class GameBoard implements GameBoard_move {
+public class GameBoard implements GameBoardmove {
 
     public static final int ROWS = 4;
     public static final int COLS = 4;
